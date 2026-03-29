@@ -238,7 +238,7 @@
     <button type="button" class="filter-btn" data-cat="arts">Arts &amp; Media</button>
     <button type="button" class="filter-btn" data-cat="social">Social Sciences</button>
   </div>
-  <div class="ranking-source">Rankings: U.S. News &amp; World Report 2025 (National), QS World University Rankings 2025 (Global), U.S. News Best Program Rankings 2025 (Program). UK/Japan schools use country-specific rankings (The Guardian / THE Japan).</div>
+  <div class="ranking-source">Rankings: U.S. News &amp; World Report 2025 (National &amp; Program). UK/Japan schools use country-specific rankings (The Guardian / THE Japan). Program rankings from U.S. News, QS Subject Rankings, or TheWrap where applicable.</div>
 
   <div class="table-wrap">
   <table>
@@ -249,7 +249,7 @@
         <th data-sort="major">Program / Major <span class="sort-arrow">&#9650;</span></th>
         <th data-sort="cat">Category <span class="sort-arrow">&#9650;</span></th>
         <th data-sort="natRank">Nat'l Rank <span class="sort-arrow">&#9650;</span></th>
-        <th data-sort="globalRank">Global Rank <span class="sort-arrow">&#9650;</span></th>
+
         <th data-sort="progRank">Program Rank <span class="sort-arrow">&#9650;</span></th>
         <th data-sort="scholarship">Scholarship <span class="sort-arrow">&#9650;</span></th>
       </tr>
@@ -261,7 +261,7 @@
 
 <footer>
   &copy; 2025 <strong>Blueprint Consulting</strong>. All rights reserved.
-  <div class="disclaimer">Rankings are approximate and sourced from publicly available 2025 data. Program rankings where available. "—" indicates unranked or data unavailable.</div>
+  <div class="disclaimer">Rankings are approximate and sourced from publicly available 2025 data. Program rankings where available. "—" indicates unranked or unavailable.</div>
 </footer>
 
 <script>
@@ -392,7 +392,6 @@ function render(data) {
     var label = catInfo[0];
     var cls = catInfo[1];
     var natDisplay = formatRank(d.natRank, d.natLabel);
-    var globalDisplay = formatRank(d.globalRank);
     var progDisplay = d.progRank > 0 ? "#" + d.progRank + (d.progLabel ? " <small style='color:#7a8ba5;font-weight:400'>(" + d.progLabel + ")</small>" : "") : "—";
     return '<tr data-cat="' + d.cat + '">' +
       '<td>' + (i + 1) + '</td>' +
@@ -400,7 +399,6 @@ function render(data) {
       '<td class="major">' + d.major + '</td>' +
       '<td><span class="category-tag ' + cls + '">' + label + '</span></td>' +
       '<td class="rank-cell ' + rankClass(d.natRank) + '">' + natDisplay + '</td>' +
-      '<td class="rank-cell ' + rankClass(d.globalRank) + '">' + globalDisplay + '</td>' +
       '<td class="rank-cell ' + (d.progRank > 0 ? rankClass(d.progRank) : 'rank-other') + '">' + progDisplay + '</td>' +
       '<td class="scholarship">' + (d.scholarship || "—") + '</td>' +
     '</tr>';
@@ -435,7 +433,6 @@ function sortData(data) {
     else if (sortCol === "major") { va = a.major.toLowerCase(); vb = b.major.toLowerCase(); }
     else if (sortCol === "cat") { va = a.cat; vb = b.cat; }
     else if (sortCol === "natRank") { va = a.natRank || 9999; vb = b.natRank || 9999; }
-    else if (sortCol === "globalRank") { va = a.globalRank || 9999; vb = b.globalRank || 9999; }
     else if (sortCol === "progRank") { va = a.progRank || 9999; vb = b.progRank || 9999; }
     else if (sortCol === "scholarship") {
       var ma = a.scholarship ? a.scholarship.match(/\$([\d,]+)/) : null;
