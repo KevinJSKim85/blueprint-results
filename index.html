@@ -69,13 +69,14 @@
     letter-spacing: 1px;
   }
 
-  main { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; }
+  main { max-width: 1280px; margin: 2rem auto; padding: 0 1.5rem; }
 
   .controls {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
+    align-items: center;
   }
   .search-box {
     flex: 1;
@@ -104,50 +105,86 @@
     border-color: var(--accent);
   }
 
+  .ranking-source {
+    width: 100%;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
   table {
     width: 100%;
     border-collapse: collapse;
     background: var(--card);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    min-width: 900px;
   }
   thead {
     background: var(--navy);
     color: #fff;
   }
   th {
-    padding: 0.85rem 1rem;
+    padding: 0.85rem 0.75rem;
     text-align: left;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
   }
+  th:hover { background: #243556; }
+  th .sort-arrow {
+    margin-left: 4px;
+    opacity: 0.4;
+    font-size: 0.65rem;
+  }
+  th.sort-active .sort-arrow { opacity: 1; }
+  th.no-sort { cursor: default; }
+  th.no-sort:hover { background: var(--navy); }
+
   td {
-    padding: 0.75rem 1rem;
-    font-size: 0.88rem;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.84rem;
     border-bottom: 1px solid var(--border);
-    vertical-align: top;
+    vertical-align: middle;
   }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--accent-light); }
 
-  .uni-name { font-weight: 600; color: var(--navy); }
+  .uni-name { font-weight: 600; color: var(--navy); white-space: nowrap; }
   .major { color: var(--text); }
   .scholarship {
     color: var(--accent);
     font-weight: 600;
     white-space: nowrap;
   }
+  .rank-cell {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+  .rank-top10 { color: #d4a843; }
+  .rank-top25 { color: #2d7a4f; }
+  .rank-top50 { color: var(--accent); }
+  .rank-top100 { color: var(--text); }
+  .rank-other { color: var(--muted); }
+
   .category-tag {
     display: inline-block;
     padding: 0.15rem 0.55rem;
     border-radius: 4px;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
   }
   .cat-stem { background: #e3f0e8; color: #2d7a4f; }
   .cat-health { background: #fde8e8; color: #c53030; }
@@ -162,14 +199,17 @@
     font-size: 0.82rem;
   }
   footer strong { color: var(--navy); }
-
-  .hidden { display: none; }
+  footer .disclaimer {
+    font-size: 0.72rem;
+    margin-top: 0.5rem;
+    color: #a0aec0;
+  }
 
   @media (max-width: 768px) {
     header h1 { font-size: 1.5rem; }
     .stats-bar { gap: 1.5rem; flex-wrap: wrap; }
     .controls { flex-direction: column; }
-    th, td { padding: 0.5rem 0.6rem; font-size: 0.8rem; }
+    th, td { padding: 0.5rem 0.5rem; font-size: 0.75rem; }
   }
 </style>
 </head>
@@ -185,6 +225,7 @@
   <div class="stat"><div class="num" id="total-count">0</div><div class="label">Total Acceptances</div></div>
   <div class="stat"><div class="num" id="uni-count">0</div><div class="label">Universities</div></div>
   <div class="stat"><div class="num" id="scholarship-total">$0</div><div class="label">Scholarships Awarded</div></div>
+  <div class="stat"><div class="num" id="top25-count">0</div><div class="label">Top 25 National</div></div>
 </div>
 
 <main>
@@ -197,115 +238,125 @@
     <button type="button" class="filter-btn" data-cat="arts">Arts &amp; Media</button>
     <button type="button" class="filter-btn" data-cat="social">Social Sciences</button>
   </div>
+  <div class="ranking-source">Rankings: U.S. News &amp; World Report 2025 (National), QS World University Rankings 2025 (Global), U.S. News Best Program Rankings 2025 (Program). UK/Japan schools use country-specific rankings (The Guardian / THE Japan).</div>
 
+  <div class="table-wrap">
   <table>
     <thead>
       <tr>
-        <th>#</th>
-        <th>University</th>
-        <th>Program / Major</th>
-        <th>Category</th>
-        <th>Scholarship</th>
+        <th class="no-sort">#</th>
+        <th data-sort="uni">University <span class="sort-arrow">&#9650;</span></th>
+        <th data-sort="major">Program / Major <span class="sort-arrow">&#9650;</span></th>
+        <th data-sort="cat">Category <span class="sort-arrow">&#9650;</span></th>
+        <th data-sort="natRank">Nat'l Rank <span class="sort-arrow">&#9650;</span></th>
+        <th data-sort="globalRank">Global Rank <span class="sort-arrow">&#9650;</span></th>
+        <th data-sort="progRank">Program Rank <span class="sort-arrow">&#9650;</span></th>
+        <th data-sort="scholarship">Scholarship <span class="sort-arrow">&#9650;</span></th>
       </tr>
     </thead>
     <tbody id="results-body"></tbody>
   </table>
+  </div>
 </main>
 
 <footer>
   &copy; 2025 <strong>Blueprint Consulting</strong>. All rights reserved.
+  <div class="disclaimer">Rankings are approximate and sourced from publicly available 2025 data. Program rankings where available. "—" indicates unranked or data unavailable.</div>
 </footer>
 
 <script>
+// natRank: US News National (US) or country rank (UK/Japan)
+// globalRank: QS World 2025
+// progRank: US News Best Program rank for that specific field (where available)
 const DATA = [
-  { uni: "Adelphi University", major: "Biology", cat: "stem", scholarship: "$148,000 ($37,000/yr)" },
-  { uni: "Babson University", major: "Technology Entrepreneurship & Business Analytics", cat: "biz", scholarship: "" },
-  { uni: "Boston University", major: "Communications", cat: "arts", scholarship: "" },
-  { uni: "Carnegie Mellon University", major: "Economics", cat: "biz", scholarship: "" },
-  { uni: "Carnegie Mellon University", major: "Film & Visual Media Program", cat: "arts", scholarship: "" },
-  { uni: "Case Western Reserve University", major: "Pre-Professional Scholars Program (PPSP) — Dentistry", cat: "health", scholarship: "" },
-  { uni: "College of Wooster", major: "Biochemistry", cat: "stem", scholarship: "$140,000 ($35,000/yr)" },
-  { uni: "Columbia University", major: "Biological Sciences", cat: "stem", scholarship: "" },
-  { uni: "Columbia University", major: "Mechanical Engineering", cat: "stem", scholarship: "" },
-  { uni: "Emory University", major: "Quantitative Sciences", cat: "stem", scholarship: "" },
-  { uni: "Emory University", major: "Economics & Statistics", cat: "biz", scholarship: "" },
-  { uni: "Emory University", major: "Quantitative Sciences", cat: "stem", scholarship: "" },
-  { uni: "Georgia Institute of Technology", major: "Business Management", cat: "biz", scholarship: "" },
-  { uni: "Indiana University", major: "Economics", cat: "biz", scholarship: "" },
-  { uni: "Keio University (Japan)", major: "PEARL — Faculty of Economics", cat: "biz", scholarship: "" },
-  { uni: "King's College London", major: "Dentistry BDS", cat: "health", scholarship: "" },
-  { uni: "Loyola Marymount University", major: "Film and Television Production", cat: "arts", scholarship: "" },
-  { uni: "MCPHS University", major: "B.S. in Predental-Dental Hygiene", cat: "health", scholarship: "$35,000 ($10,000/yr)" },
-  { uni: "New York University", major: "Pre-Health: Dental", cat: "health", scholarship: "" },
-  { uni: "New York University", major: "Cinema and Media Studies (BFA)", cat: "arts", scholarship: "" },
-  { uni: "Newcastle University (UK)", major: "5-Year MBBS Medicine", cat: "health", scholarship: "" },
-  { uni: "Northeastern University", major: "Pharmacy (PharmD)", cat: "health", scholarship: "" },
-  { uni: "Northeastern University", major: "Computer Engineering & Computer Science", cat: "stem", scholarship: "" },
-  { uni: "Northeastern University", major: "Computer Science & Biology (Martinson Honors)", cat: "stem", scholarship: "" },
-  { uni: "Northeastern University", major: "Mathematics & Sociology", cat: "social", scholarship: "" },
-  { uni: "Northwestern University", major: "Biological Sciences", cat: "stem", scholarship: "" },
-  { uni: "Nova Southeastern University", major: "Biology", cat: "stem", scholarship: "$84,000 ($21,000/yr)" },
-  { uni: "Penn State University", major: "Mechanical Engineering", cat: "stem", scholarship: "" },
-  { uni: "Purdue University", major: "Actuarial Science", cat: "stem", scholarship: "" },
-  { uni: "Purdue University", major: "Engineering", cat: "stem", scholarship: "" },
-  { uni: "Purdue University", major: "Economics", cat: "biz", scholarship: "" },
-  { uni: "Purdue University", major: "Mathematics", cat: "stem", scholarship: "" },
-  { uni: "Queen Mary University of London", major: "Medicine MBBS", cat: "health", scholarship: "" },
-  { uni: "Rice University", major: "Biology (Cell Biology & Genetics)", cat: "stem", scholarship: "" },
-  { uni: "Rice University", major: "Architecture", cat: "arts", scholarship: "" },
-  { uni: "Rutgers University", major: "Pre-Dentistry", cat: "health", scholarship: "" },
-  { uni: "Santa Clara University", major: "Economics", cat: "biz", scholarship: "" },
-  { uni: "St. John's University", major: "Pharmacy (6-Year Pharm.D.)", cat: "health", scholarship: "$144,000 ($36,000/yr)" },
-  { uni: "Stony Brook University (SUNY)", major: "Biology", cat: "stem", scholarship: "" },
-  { uni: "Stony Brook University (SUNY)", major: "Pre-Clinical Laboratory Science", cat: "health", scholarship: "$60,000 ($15,000/yr)" },
-  { uni: "SUNY University at Buffalo", major: "Nuclear Medicine Technology", cat: "health", scholarship: "$72,000 ($18,000/yr)" },
-  { uni: "Temple University", major: "Combined PharmD", cat: "health", scholarship: "" },
-  { uni: "Texas A&M University", major: "General Engineering", cat: "stem", scholarship: "" },
-  { uni: "University of Bristol (UK)", major: "Veterinary Science: Accelerated Graduate Entry", cat: "health", scholarship: "" },
-  { uni: "University of California, Berkeley", major: "Political Science", cat: "social", scholarship: "" },
-  { uni: "University of California, Berkeley", major: "Economics", cat: "biz", scholarship: "" },
-  { uni: "University of California, Berkeley", major: "Film & Media", cat: "arts", scholarship: "" },
-  { uni: "University of California, Davis", major: "Mechanical Engineering", cat: "stem", scholarship: "" },
-  { uni: "University of California, Davis", major: "Animal Biology", cat: "stem", scholarship: "" },
-  { uni: "University of California, Davis", major: "Cinema and Digital Media", cat: "arts", scholarship: "" },
-  { uni: "University of California, Davis", major: "Applied Mathematics", cat: "stem", scholarship: "" },
-  { uni: "University of California, Davis", major: "Data Science", cat: "stem", scholarship: "" },
-  { uni: "University of California, Davis", major: "Economics", cat: "biz", scholarship: "" },
-  { uni: "University of California, Davis", major: "Music", cat: "arts", scholarship: "" },
-  { uni: "University of California, Irvine", major: "Business Management", cat: "biz", scholarship: "" },
-  { uni: "University of California, Irvine", major: "Biological Sciences, B.S.", cat: "stem", scholarship: "" },
-  { uni: "University of California, Irvine", major: "Film and Media Studies, B.A.", cat: "arts", scholarship: "" },
-  { uni: "University of California, Irvine", major: "Applied & Computational Mathematics, B.S.", cat: "stem", scholarship: "" },
-  { uni: "University of California, Irvine", major: "Software Engineering & Biomedical Engineering, B.S.", cat: "stem", scholarship: "" },
-  { uni: "University of California, Irvine", major: "Economics", cat: "biz", scholarship: "" },
-  { uni: "University of California, Irvine", major: "Undeclared", cat: "social", scholarship: "" },
-  { uni: "University of California, Los Angeles", major: "Mechanical Engineering", cat: "stem", scholarship: "" },
-  { uni: "University of California, Los Angeles", major: "Computational & Systems Biology", cat: "stem", scholarship: "" },
-  { uni: "University of California, San Diego", major: "Public Policy", cat: "social", scholarship: "" },
-  { uni: "University of California, Santa Barbara", major: "Public Policy", cat: "social", scholarship: "" },
-  { uni: "University of Detroit Mercy", major: "Accelerated 7-Year Dental Program", cat: "health", scholarship: "$10,000" },
-  { uni: "University of Illinois, Urbana-Champaign", major: "Media & Cinema Studies", cat: "arts", scholarship: "" },
-  { uni: "University of Illinois, Urbana-Champaign", major: "Biomedical Engineering", cat: "stem", scholarship: "" },
-  { uni: "University of Michigan, Dearborn", major: "Cybersecurity & Information Assurance", cat: "stem", scholarship: "" },
-  { uni: "University of North Carolina", major: "Economics", cat: "biz", scholarship: "" },
-  { uni: "University of the Pacific", major: "Pre-Dental Advantage Program", cat: "health", scholarship: "$84,000 ($21,000/yr)" },
-  { uni: "University of the Pacific", major: "Pre-Pharmacy Advantage: 2+3 Pathway", cat: "health", scholarship: "$32,000" },
-  { uni: "University of Pittsburgh", major: "Pharmacy & Pharmaceutical Sciences", cat: "health", scholarship: "" },
-  { uni: "University of Rhode Island", major: "Pharmacy (0-6 Doctor of Pharmacy)", cat: "health", scholarship: "$84,000 (Presidential, 6 yrs)" },
-  { uni: "University of Southern California", major: "Public Policy, B.S. (PSPP)", cat: "social", scholarship: "" },
-  { uni: "University of Southern California", major: "Cinema Studies, B.A.", cat: "arts", scholarship: "" },
-  { uni: "University of Southern California", major: "Film & Television Production", cat: "arts", scholarship: "" },
-  { uni: "University of Texas, Austin", major: "Biochemistry", cat: "stem", scholarship: "" },
-  { uni: "University of Texas, Austin", major: "Mathematics", cat: "stem", scholarship: "" },
-  { uni: "University of Toledo", major: "Bio + DDS Accelerated Program (Case Western)", cat: "health", scholarship: "" },
-  { uni: "University of Toledo", major: "Pharmacy & Pharmaceutical Sciences", cat: "health", scholarship: "" },
-  { uni: "University of Washington, Seattle", major: "Cinema and Media Studies", cat: "arts", scholarship: "" },
-  { uni: "University of Washington, Seattle", major: "Applied & Computational Math Sciences", cat: "stem", scholarship: "" },
-  { uni: "University of Washington, Seattle", major: "Microbiology", cat: "stem", scholarship: "" },
-  { uni: "University of Wisconsin-Madison", major: "Applied Math, Engineering & Physics", cat: "stem", scholarship: "" },
-  { uni: "Washington University in St. Louis", major: "Biology & Music", cat: "stem", scholarship: "" },
-  { uni: "Western New England University", major: "Pharmacy", cat: "health", scholarship: "" },
-  { uni: "Westminster University", major: "Pre-Dental: Molecular Biology", cat: "health", scholarship: "$120,000 ($30,000/yr)" },
+  { uni: "Adelphi University", major: "Biology", cat: "stem", natRank: 167, globalRank: 0, progRank: 0, scholarship: "$148,000 ($37,000/yr)" },
+  { uni: "Babson University", major: "Technology Entrepreneurship & Business Analytics", cat: "biz", natRank: 0, globalRank: 0, progRank: 1, progLabel: "Entrepreneurship", scholarship: "" },
+  { uni: "Boston University", major: "Communications", cat: "arts", natRank: 43, globalRank: 90, progRank: 0, scholarship: "" },
+  { uni: "Carnegie Mellon University", major: "Economics", cat: "biz", natRank: 24, globalRank: 52, progRank: 0, scholarship: "" },
+  { uni: "Carnegie Mellon University", major: "Film & Visual Media Program", cat: "arts", natRank: 24, globalRank: 52, progRank: 0, scholarship: "" },
+  { uni: "Case Western Reserve University", major: "Pre-Professional Scholars Program (PPSP) — Dentistry", cat: "health", natRank: 45, globalRank: 307, progRank: 0, scholarship: "" },
+  { uni: "College of Wooster", major: "Biochemistry", cat: "stem", natRank: 0, globalRank: 0, progRank: 0, nlac: 63, scholarship: "$140,000 ($35,000/yr)" },
+  { uni: "Columbia University", major: "Biological Sciences", cat: "stem", natRank: 3, globalRank: 23, progRank: 11, progLabel: "Biology", scholarship: "" },
+  { uni: "Columbia University", major: "Mechanical Engineering", cat: "stem", natRank: 3, globalRank: 23, progRank: 27, progLabel: "Mech. Eng.", scholarship: "" },
+  { uni: "Emory University", major: "Quantitative Sciences", cat: "stem", natRank: 24, globalRank: 155, progRank: 0, scholarship: "" },
+  { uni: "Emory University", major: "Economics & Statistics", cat: "biz", natRank: 24, globalRank: 155, progRank: 0, scholarship: "" },
+  { uni: "Emory University", major: "Quantitative Sciences", cat: "stem", natRank: 24, globalRank: 155, progRank: 0, scholarship: "" },
+  { uni: "Georgia Institute of Technology", major: "Business Management", cat: "biz", natRank: 33, globalRank: 85, progRank: 5, progLabel: "Engineering", scholarship: "" },
+  { uni: "Indiana University", major: "Economics", cat: "biz", natRank: 73, globalRank: 312, progRank: 0, scholarship: "" },
+  { uni: "Keio University (Japan)", major: "PEARL — Faculty of Economics", cat: "biz", natRank: 0, globalRank: 188, progRank: 0, natLabel: "Japan #2", scholarship: "" },
+  { uni: "King's College London", major: "Dentistry BDS", cat: "health", natRank: 0, globalRank: 40, progRank: 1, progLabel: "Dentistry (UK)", natLabel: "UK #7", scholarship: "" },
+  { uni: "Loyola Marymount University", major: "Film and Television Production", cat: "arts", natRank: 75, globalRank: 0, progRank: 0, scholarship: "" },
+  { uni: "MCPHS University", major: "B.S. in Predental-Dental Hygiene", cat: "health", natRank: 0, globalRank: 0, progRank: 0, scholarship: "$35,000 ($10,000/yr)" },
+  { uni: "New York University", major: "Pre-Health: Dental", cat: "health", natRank: 35, globalRank: 38, progRank: 0, scholarship: "" },
+  { uni: "New York University", major: "Cinema and Media Studies (BFA)", cat: "arts", natRank: 35, globalRank: 38, progRank: 6, progLabel: "Film/TV", scholarship: "" },
+  { uni: "Newcastle University (UK)", major: "5-Year MBBS Medicine", cat: "health", natRank: 0, globalRank: 110, progRank: 0, natLabel: "UK #18", scholarship: "" },
+  { uni: "Northeastern University", major: "Pharmacy (PharmD)", cat: "health", natRank: 40, globalRank: 375, progRank: 41, progLabel: "Pharmacy", scholarship: "" },
+  { uni: "Northeastern University", major: "Computer Engineering & Computer Science", cat: "stem", natRank: 40, globalRank: 375, progRank: 32, progLabel: "CS", scholarship: "" },
+  { uni: "Northeastern University", major: "Computer Science & Biology (Martinson Honors)", cat: "stem", natRank: 40, globalRank: 375, progRank: 32, progLabel: "CS", scholarship: "" },
+  { uni: "Northeastern University", major: "Mathematics & Sociology", cat: "social", natRank: 40, globalRank: 375, progRank: 0, scholarship: "" },
+  { uni: "Northwestern University", major: "Biological Sciences", cat: "stem", natRank: 9, globalRank: 24, progRank: 17, progLabel: "Biology", scholarship: "" },
+  { uni: "Nova Southeastern University", major: "Biology", cat: "stem", natRank: 247, globalRank: 0, progRank: 0, scholarship: "$84,000 ($21,000/yr)" },
+  { uni: "Penn State University", major: "Mechanical Engineering", cat: "stem", natRank: 60, globalRank: 93, progRank: 14, progLabel: "Engineering", scholarship: "" },
+  { uni: "Purdue University", major: "Actuarial Science", cat: "stem", natRank: 43, globalRank: 99, progRank: 0, scholarship: "" },
+  { uni: "Purdue University", major: "Engineering", cat: "stem", natRank: 43, globalRank: 99, progRank: 4, progLabel: "Engineering", scholarship: "" },
+  { uni: "Purdue University", major: "Economics", cat: "biz", natRank: 43, globalRank: 99, progRank: 0, scholarship: "" },
+  { uni: "Purdue University", major: "Mathematics", cat: "stem", natRank: 43, globalRank: 99, progRank: 24, progLabel: "Math", scholarship: "" },
+  { uni: "Queen Mary University of London", major: "Medicine MBBS", cat: "health", natRank: 0, globalRank: 145, progRank: 0, natLabel: "UK #22", scholarship: "" },
+  { uni: "Rice University", major: "Biology (Cell Biology & Genetics)", cat: "stem", natRank: 17, globalRank: 100, progRank: 0, scholarship: "" },
+  { uni: "Rice University", major: "Architecture", cat: "arts", natRank: 17, globalRank: 100, progRank: 0, scholarship: "" },
+  { uni: "Rutgers University", major: "Pre-Dentistry", cat: "health", natRank: 40, globalRank: 200, progRank: 0, scholarship: "" },
+  { uni: "Santa Clara University", major: "Economics", cat: "biz", natRank: 60, globalRank: 0, progRank: 0, scholarship: "" },
+  { uni: "St. John's University", major: "Pharmacy (6-Year Pharm.D.)", cat: "health", natRank: 170, globalRank: 0, progRank: 0, scholarship: "$144,000 ($36,000/yr)" },
+  { uni: "Stony Brook University (SUNY)", major: "Biology", cat: "stem", natRank: 77, globalRank: 375, progRank: 0, scholarship: "" },
+  { uni: "Stony Brook University (SUNY)", major: "Pre-Clinical Laboratory Science", cat: "health", natRank: 77, globalRank: 375, progRank: 0, scholarship: "$60,000 ($15,000/yr)" },
+  { uni: "SUNY University at Buffalo", major: "Nuclear Medicine Technology", cat: "health", natRank: 89, globalRank: 400, progRank: 0, scholarship: "$72,000 ($18,000/yr)" },
+  { uni: "Temple University", major: "Combined PharmD", cat: "health", natRank: 89, globalRank: 0, progRank: 48, progLabel: "Pharmacy", scholarship: "" },
+  { uni: "Texas A&M University", major: "General Engineering", cat: "stem", natRank: 47, globalRank: 134, progRank: 12, progLabel: "Engineering", scholarship: "" },
+  { uni: "University of Bristol (UK)", major: "Veterinary Science: Accelerated Graduate Entry", cat: "health", natRank: 0, globalRank: 54, progRank: 2, progLabel: "Vet Sci (UK)", natLabel: "UK #10", scholarship: "" },
+  { uni: "University of California, Berkeley", major: "Political Science", cat: "social", natRank: 4, globalRank: 10, progRank: 3, progLabel: "Poli Sci", scholarship: "" },
+  { uni: "University of California, Berkeley", major: "Economics", cat: "biz", natRank: 4, globalRank: 10, progRank: 3, progLabel: "Economics", scholarship: "" },
+  { uni: "University of California, Berkeley", major: "Film & Media", cat: "arts", natRank: 4, globalRank: 10, progRank: 0, scholarship: "" },
+  { uni: "University of California, Davis", major: "Mechanical Engineering", cat: "stem", natRank: 28, globalRank: 130, progRank: 33, progLabel: "Engineering", scholarship: "" },
+  { uni: "University of California, Davis", major: "Animal Biology", cat: "stem", natRank: 28, globalRank: 130, progRank: 1, progLabel: "Vet/Animal Sci", scholarship: "" },
+  { uni: "University of California, Davis", major: "Cinema and Digital Media", cat: "arts", natRank: 28, globalRank: 130, progRank: 0, scholarship: "" },
+  { uni: "University of California, Davis", major: "Applied Mathematics", cat: "stem", natRank: 28, globalRank: 130, progRank: 0, scholarship: "" },
+  { uni: "University of California, Davis", major: "Data Science", cat: "stem", natRank: 28, globalRank: 130, progRank: 0, scholarship: "" },
+  { uni: "University of California, Davis", major: "Economics", cat: "biz", natRank: 28, globalRank: 130, progRank: 0, scholarship: "" },
+  { uni: "University of California, Davis", major: "Music", cat: "arts", natRank: 28, globalRank: 130, progRank: 0, scholarship: "" },
+  { uni: "University of California, Irvine", major: "Business Management", cat: "biz", natRank: 33, globalRank: 235, progRank: 0, scholarship: "" },
+  { uni: "University of California, Irvine", major: "Biological Sciences, B.S.", cat: "stem", natRank: 33, globalRank: 235, progRank: 0, scholarship: "" },
+  { uni: "University of California, Irvine", major: "Film and Media Studies, B.A.", cat: "arts", natRank: 33, globalRank: 235, progRank: 0, scholarship: "" },
+  { uni: "University of California, Irvine", major: "Applied & Computational Mathematics, B.S.", cat: "stem", natRank: 33, globalRank: 235, progRank: 0, scholarship: "" },
+  { uni: "University of California, Irvine", major: "Software Engineering & Biomedical Engineering, B.S.", cat: "stem", natRank: 33, globalRank: 235, progRank: 0, scholarship: "" },
+  { uni: "University of California, Irvine", major: "Economics", cat: "biz", natRank: 33, globalRank: 235, progRank: 0, scholarship: "" },
+  { uni: "University of California, Irvine", major: "Undeclared", cat: "social", natRank: 33, globalRank: 235, progRank: 0, scholarship: "" },
+  { uni: "University of California, Los Angeles", major: "Mechanical Engineering", cat: "stem", natRank: 15, globalRank: 18, progRank: 16, progLabel: "Engineering", scholarship: "" },
+  { uni: "University of California, Los Angeles", major: "Computational & Systems Biology", cat: "stem", natRank: 15, globalRank: 18, progRank: 6, progLabel: "Biology", scholarship: "" },
+  { uni: "University of California, San Diego", major: "Public Policy", cat: "social", natRank: 28, globalRank: 53, progRank: 0, scholarship: "" },
+  { uni: "University of California, Santa Barbara", major: "Public Policy", cat: "social", natRank: 35, globalRank: 149, progRank: 0, scholarship: "" },
+  { uni: "University of Detroit Mercy", major: "Accelerated 7-Year Dental Program", cat: "health", natRank: 0, globalRank: 0, progRank: 0, scholarship: "$10,000" },
+  { uni: "University of Illinois, Urbana-Champaign", major: "Media & Cinema Studies", cat: "arts", natRank: 35, globalRank: 64, progRank: 0, scholarship: "" },
+  { uni: "University of Illinois, Urbana-Champaign", major: "Biomedical Engineering", cat: "stem", natRank: 35, globalRank: 64, progRank: 6, progLabel: "Engineering", scholarship: "" },
+  { uni: "University of Michigan, Dearborn", major: "Cybersecurity & Information Assurance", cat: "stem", natRank: 0, globalRank: 0, progRank: 0, natLabel: "Regional", scholarship: "" },
+  { uni: "University of North Carolina", major: "Economics", cat: "biz", natRank: 22, globalRank: 100, progRank: 21, progLabel: "Economics", scholarship: "" },
+  { uni: "University of the Pacific", major: "Pre-Dental Advantage Program", cat: "health", natRank: 167, globalRank: 0, progRank: 5, progLabel: "Dentistry", scholarship: "$84,000 ($21,000/yr)" },
+  { uni: "University of the Pacific", major: "Pre-Pharmacy Advantage: 2+3 Pathway", cat: "health", natRank: 167, globalRank: 0, progRank: 0, scholarship: "$32,000" },
+  { uni: "University of Pittsburgh", major: "Pharmacy & Pharmaceutical Sciences", cat: "health", natRank: 67, globalRank: 228, progRank: 12, progLabel: "Pharmacy", scholarship: "" },
+  { uni: "University of Rhode Island", major: "Pharmacy (0-6 Doctor of Pharmacy)", cat: "health", natRank: 167, globalRank: 0, progRank: 35, progLabel: "Pharmacy", scholarship: "$84,000 (Presidential, 6 yrs)" },
+  { uni: "University of Southern California", major: "Public Policy, B.S. (PSPP)", cat: "social", natRank: 28, globalRank: 116, progRank: 0, scholarship: "" },
+  { uni: "University of Southern California", major: "Cinema Studies, B.A.", cat: "arts", natRank: 28, globalRank: 116, progRank: 1, progLabel: "Film/TV", scholarship: "" },
+  { uni: "University of Southern California", major: "Film & Television Production", cat: "arts", natRank: 28, globalRank: 116, progRank: 1, progLabel: "Film/TV", scholarship: "" },
+  { uni: "University of Texas, Austin", major: "Biochemistry", cat: "stem", natRank: 32, globalRank: 58, progRank: 0, scholarship: "" },
+  { uni: "University of Texas, Austin", major: "Mathematics", cat: "stem", natRank: 32, globalRank: 58, progRank: 14, progLabel: "Math", scholarship: "" },
+  { uni: "University of Toledo", major: "Bio + DDS Accelerated Program (Case Western)", cat: "health", natRank: 250, globalRank: 0, progRank: 0, scholarship: "" },
+  { uni: "University of Toledo", major: "Pharmacy & Pharmaceutical Sciences", cat: "health", natRank: 250, globalRank: 0, progRank: 0, scholarship: "" },
+  { uni: "University of Washington, Seattle", major: "Cinema and Media Studies", cat: "arts", natRank: 40, globalRank: 63, progRank: 0, scholarship: "" },
+  { uni: "University of Washington, Seattle", major: "Applied & Computational Math Sciences", cat: "stem", natRank: 40, globalRank: 63, progRank: 0, scholarship: "" },
+  { uni: "University of Washington, Seattle", major: "Microbiology", cat: "stem", natRank: 40, globalRank: 63, progRank: 0, scholarship: "" },
+  { uni: "University of Wisconsin-Madison", major: "Applied Math, Engineering & Physics", cat: "stem", natRank: 35, globalRank: 83, progRank: 12, progLabel: "Engineering", scholarship: "" },
+  { uni: "Washington University in St. Louis", major: "Biology & Music", cat: "stem", natRank: 24, globalRank: 154, progRank: 0, scholarship: "" },
+  { uni: "Western New England University", major: "Pharmacy", cat: "health", natRank: 0, globalRank: 0, progRank: 0, scholarship: "" },
+  { uni: "Westminster University", major: "Pre-Dental: Molecular Biology", cat: "health", natRank: 0, globalRank: 0, progRank: 0, scholarship: "$120,000 ($30,000/yr)" },
 ];
 
 const CAT_LABELS = {
@@ -316,56 +367,141 @@ const CAT_LABELS = {
   social: ["Social Sci", "cat-social"],
 };
 
+function rankClass(r) {
+  if (r <= 0) return "rank-other";
+  if (r <= 10) return "rank-top10";
+  if (r <= 25) return "rank-top25";
+  if (r <= 50) return "rank-top50";
+  if (r <= 100) return "rank-top100";
+  return "rank-other";
+}
+
+function formatRank(r, label) {
+  if (label) return label;
+  if (!r || r <= 0) return "—";
+  return "#" + r;
+}
+
+let sortCol = null;
+let sortDir = 1; // 1 = asc, -1 = desc
+
 function render(data) {
   const tbody = document.getElementById("results-body");
-  tbody.innerHTML = data.map((d, i) => {
-    const [label, cls] = CAT_LABELS[d.cat] || ["—", ""];
-    return `<tr data-cat="${d.cat}">
-      <td>${i + 1}</td>
-      <td class="uni-name">${d.uni}</td>
-      <td class="major">${d.major}</td>
-      <td><span class="category-tag ${cls}">${label}</span></td>
-      <td class="scholarship">${d.scholarship || "—"}</td>
-    </tr>`;
+  tbody.innerHTML = data.map(function(d, i) {
+    var catInfo = CAT_LABELS[d.cat] || ["—", ""];
+    var label = catInfo[0];
+    var cls = catInfo[1];
+    var natDisplay = formatRank(d.natRank, d.natLabel);
+    var globalDisplay = formatRank(d.globalRank);
+    var progDisplay = d.progRank > 0 ? "#" + d.progRank + (d.progLabel ? " <small style='color:#7a8ba5;font-weight:400'>(" + d.progLabel + ")</small>" : "") : "—";
+    return '<tr data-cat="' + d.cat + '">' +
+      '<td>' + (i + 1) + '</td>' +
+      '<td class="uni-name">' + d.uni + '</td>' +
+      '<td class="major">' + d.major + '</td>' +
+      '<td><span class="category-tag ' + cls + '">' + label + '</span></td>' +
+      '<td class="rank-cell ' + rankClass(d.natRank) + '">' + natDisplay + '</td>' +
+      '<td class="rank-cell ' + rankClass(d.globalRank) + '">' + globalDisplay + '</td>' +
+      '<td class="rank-cell ' + (d.progRank > 0 ? rankClass(d.progRank) : 'rank-other') + '">' + progDisplay + '</td>' +
+      '<td class="scholarship">' + (d.scholarship || "—") + '</td>' +
+    '</tr>';
   }).join("");
 }
 
 function updateStats(data) {
   document.getElementById("total-count").textContent = data.length;
-  const unis = new Set(data.map(d => d.uni));
-  document.getElementById("uni-count").textContent = unis.size;
+  var unis = {};
+  var total = 0;
+  var top25 = {};
+  for (var i = 0; i < data.length; i++) {
+    var d = data[i];
+    unis[d.uni] = true;
+    if (d.natRank > 0 && d.natRank <= 25) top25[d.uni] = true;
+    if (d.scholarship) {
+      var m = d.scholarship.match(/\$([\d,]+)/);
+      if (m) total += parseInt(m[1].replace(/,/g, ""));
+    }
+  }
+  document.getElementById("uni-count").textContent = Object.keys(unis).length;
+  document.getElementById("scholarship-total").textContent = "$" + total.toLocaleString();
+  document.getElementById("top25-count").textContent = Object.keys(top25).length;
+}
 
-  let total = 0;
-  data.forEach(d => {
-    if (!d.scholarship) return;
-    const m = d.scholarship.match(/\$([\d,]+)/);
-    if (m) total += parseInt(m[1].replace(/,/g, ""));
+function sortData(data) {
+  if (!sortCol) return data;
+  var sorted = data.slice();
+  sorted.sort(function(a, b) {
+    var va, vb;
+    if (sortCol === "uni") { va = a.uni.toLowerCase(); vb = b.uni.toLowerCase(); }
+    else if (sortCol === "major") { va = a.major.toLowerCase(); vb = b.major.toLowerCase(); }
+    else if (sortCol === "cat") { va = a.cat; vb = b.cat; }
+    else if (sortCol === "natRank") { va = a.natRank || 9999; vb = b.natRank || 9999; }
+    else if (sortCol === "globalRank") { va = a.globalRank || 9999; vb = b.globalRank || 9999; }
+    else if (sortCol === "progRank") { va = a.progRank || 9999; vb = b.progRank || 9999; }
+    else if (sortCol === "scholarship") {
+      var ma = a.scholarship ? a.scholarship.match(/\$([\d,]+)/) : null;
+      var mb = b.scholarship ? b.scholarship.match(/\$([\d,]+)/) : null;
+      va = ma ? parseInt(ma[1].replace(/,/g, "")) : 0;
+      vb = mb ? parseInt(mb[1].replace(/,/g, "")) : 0;
+    }
+    else { return 0; }
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
   });
-  document.getElementById("scholarship-total").textContent =
-    "$" + total.toLocaleString();
+  return sorted;
 }
 
 function applyFilters() {
-  const q = document.getElementById("search").value.toLowerCase();
-  const cat = document.querySelector(".filter-btn.active")?.dataset.cat || "all";
-  const filtered = DATA.filter(d => {
-    const matchCat = cat === "all" || d.cat === cat;
-    const matchQ = !q || d.uni.toLowerCase().includes(q) || d.major.toLowerCase().includes(q);
-    return matchCat && matchQ;
-  });
+  var q = document.getElementById("search").value.toLowerCase();
+  var activeBtn = document.querySelector(".filter-btn.active");
+  var cat = activeBtn ? activeBtn.dataset.cat : "all";
+  var filtered = [];
+  for (var i = 0; i < DATA.length; i++) {
+    var d = DATA[i];
+    var matchCat = cat === "all" || d.cat === cat;
+    var matchQ = !q || d.uni.toLowerCase().indexOf(q) !== -1 || d.major.toLowerCase().indexOf(q) !== -1;
+    if (matchCat && matchQ) filtered.push(d);
+  }
+  filtered = sortData(filtered);
   render(filtered);
   updateStats(filtered);
 }
 
+// Sortable headers
+document.querySelectorAll("th[data-sort]").forEach(function(th) {
+  th.addEventListener("click", function() {
+    var col = th.dataset.sort;
+    if (sortCol === col) {
+      sortDir *= -1;
+    } else {
+      sortCol = col;
+      sortDir = 1;
+    }
+    // Update arrow visuals
+    document.querySelectorAll("th[data-sort]").forEach(function(t) {
+      t.classList.remove("sort-active");
+      t.querySelector(".sort-arrow").innerHTML = "&#9650;";
+    });
+    th.classList.add("sort-active");
+    th.querySelector(".sort-arrow").innerHTML = sortDir === 1 ? "&#9650;" : "&#9660;";
+    applyFilters();
+  });
+});
+
 document.getElementById("search").addEventListener("input", applyFilters);
-document.querySelectorAll(".filter-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+document.querySelectorAll(".filter-btn").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
     btn.classList.add("active");
     applyFilters();
   });
 });
 
+// Default: sort by national rank ascending
+sortCol = "natRank";
+sortDir = 1;
+var natTh = document.querySelector('th[data-sort="natRank"]');
+if (natTh) { natTh.classList.add("sort-active"); }
 applyFilters();
 </script>
 </body>
