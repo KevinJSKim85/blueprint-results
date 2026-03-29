@@ -99,6 +99,11 @@
     transition: all 0.2s;
     color: var(--text);
   }
+  .filter-btns-wrap {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
   .filter-btn:hover, .filter-btn.active {
     background: var(--accent);
     color: #fff;
@@ -205,11 +210,103 @@
     color: #a0aec0;
   }
 
+  /* --- Mobile: card layout instead of table --- */
   @media (max-width: 768px) {
-    header h1 { font-size: 1.5rem; }
-    .stats-bar { gap: 1.5rem; flex-wrap: wrap; }
-    .controls { flex-direction: column; }
-    th, td { padding: 0.5rem 0.5rem; font-size: 0.75rem; }
+    header { padding: 2rem 1.2rem 1.8rem; }
+    header .brand { font-size: 0.75rem; letter-spacing: 3px; }
+    header h1 { font-size: 1.3rem; }
+    header p { font-size: 0.85rem; }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .stat .num { font-size: 1.4rem; }
+    .stat .label { font-size: 0.68rem; }
+
+    main { padding: 0 0.75rem; margin: 1rem auto; }
+
+    .controls { flex-direction: column; gap: 0.5rem; }
+    .search-box { min-width: 100%; font-size: 16px; /* prevents iOS zoom */ }
+    .filter-btns-wrap {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.72rem;
+      border-radius: 6px;
+    }
+
+    .ranking-source { font-size: 0.65rem; margin-bottom: 0.75rem; }
+
+    .table-wrap { box-shadow: none; border-radius: 0; }
+
+    /* Hide table, show cards */
+    table { display: none; }
+    .mobile-cards { display: flex; flex-direction: column; gap: 0.6rem; }
+    .mobile-card {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      border-left: 4px solid var(--accent);
+    }
+    .mobile-card .mc-uni {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 0.88rem;
+      margin-bottom: 0.2rem;
+    }
+    .mobile-card .mc-major {
+      font-size: 0.82rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .mobile-card .mc-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .mobile-card .mc-meta-item {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .mobile-card .mc-meta-item strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .mobile-card .mc-scholarship {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+    .mobile-card .mc-ranks {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 0.4rem;
+    }
+    .mobile-card .mc-rank-badge {
+      background: var(--accent-light);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .mobile-card .mc-rank-badge.gold { background: #fef3e2; color: #b7791f; }
+    .mobile-card .mc-rank-badge.green { background: #e3f0e8; color: #2d7a4f; }
+    .mobile-card .mc-rank-badge.blue { background: #e8f4fd; color: #2b6cb0; }
+
+    footer { padding: 1.5rem 1rem; }
+    footer .disclaimer { font-size: 0.65rem; }
+  }
+
+  @media (min-width: 769px) {
+    .mobile-cards { display: none; }
   }
 </style>
 </head>
@@ -231,12 +328,14 @@
 <main>
   <div class="controls">
     <input type="text" class="search-box" id="search" placeholder="Search university or major...">
-    <button type="button" class="filter-btn active" data-cat="all">All</button>
-    <button type="button" class="filter-btn" data-cat="stem">STEM</button>
-    <button type="button" class="filter-btn" data-cat="health">Health &amp; Medicine</button>
-    <button type="button" class="filter-btn" data-cat="biz">Business &amp; Econ</button>
-    <button type="button" class="filter-btn" data-cat="arts">Arts &amp; Media</button>
-    <button type="button" class="filter-btn" data-cat="social">Social Sciences</button>
+    <div class="filter-btns-wrap">
+      <button type="button" class="filter-btn active" data-cat="all">All</button>
+      <button type="button" class="filter-btn" data-cat="stem">STEM</button>
+      <button type="button" class="filter-btn" data-cat="health">Health &amp; Medicine</button>
+      <button type="button" class="filter-btn" data-cat="biz">Business &amp; Econ</button>
+      <button type="button" class="filter-btn" data-cat="arts">Arts &amp; Media</button>
+      <button type="button" class="filter-btn" data-cat="social">Social Sciences</button>
+    </div>
   </div>
   <div class="ranking-source">Rankings: U.S. News &amp; World Report 2025 (National &amp; Program). UK/Japan schools use country-specific rankings (The Guardian / THE Japan). Program rankings from U.S. News, QS Subject Rankings, or TheWrap where applicable.</div>
 
@@ -257,6 +356,7 @@
     <tbody id="results-body"></tbody>
   </table>
   </div>
+  <div class="mobile-cards" id="mobile-cards"></div>
 </main>
 
 <footer>
@@ -403,6 +503,33 @@ function render(data) {
       '<td class="scholarship">' + (d.scholarship || "—") + '</td>' +
     '</tr>';
   }).join("");
+
+  // Mobile cards
+  var mc = document.getElementById("mobile-cards");
+  if (mc) {
+    mc.innerHTML = data.map(function(d) {
+      var catInfo = CAT_LABELS[d.cat] || ["—", ""];
+      var label = catInfo[0];
+      var cls = catInfo[1];
+      var natDisplay = formatRank(d.natRank, d.natLabel);
+      var badges = '';
+      if (d.natRank > 0 || d.natLabel) {
+        var bc = d.natRank <= 10 ? 'gold' : d.natRank <= 25 ? 'green' : 'blue';
+        badges += '<span class="mc-rank-badge ' + bc + '">Nat\'l ' + natDisplay + '</span>';
+      }
+      if (d.progRank > 0) {
+        var pc = d.progRank <= 10 ? 'gold' : d.progRank <= 25 ? 'green' : 'blue';
+        badges += '<span class="mc-rank-badge ' + pc + '">#' + d.progRank + (d.progLabel ? ' ' + d.progLabel : '') + '</span>';
+      }
+      var schol = d.scholarship ? '<div class="mc-scholarship">' + d.scholarship + '</div>' : '';
+      return '<div class="mobile-card">' +
+        '<div class="mc-uni">' + d.uni + '</div>' +
+        '<div class="mc-major">' + d.major + '</div>' +
+        '<div class="mc-meta"><span class="category-tag ' + cls + '">' + label + '</span>' + schol + '</div>' +
+        (badges ? '<div class="mc-ranks">' + badges + '</div>' : '') +
+      '</div>';
+    }).join("");
+  }
 }
 
 function updateStats(data) {
