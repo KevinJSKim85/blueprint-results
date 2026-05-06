@@ -4,202 +4,438 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blueprint Consulting — 2025-2026 University Admissions Results</title>
+<link rel="icon" href="data:,">
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,600;6..72,700&display=swap');
+
   :root {
-    --navy: #1a2744;
-    --accent: #3b6bdb;
-    --accent-light: #e8eefa;
-    --bg: #f7f8fb;
+    --navy: #101827;
+    --navy-2: #17233a;
+    --ink: #243149;
+    --accent: #2f6df6;
+    --accent-strong: #154fc6;
+    --accent-light: #eef4ff;
+    --bg: #eef2f7;
     --card: #ffffff;
-    --text: #2c3e50;
-    --muted: #7a8ba5;
-    --border: #e2e8f0;
-    --gold: #d4a843;
+    --text: #26354d;
+    --muted: #728098;
+    --border: #dce4ef;
+    --gold: #d7a94b;
+    --gold-soft: #fff3d7;
+    --green: #2b7a5b;
+    --red: #bf4a4a;
+    --violet: #7357d8;
+    --shadow-sm: 0 1px 2px rgba(16, 24, 39, 0.08);
+    --shadow-md: 0 16px 40px rgba(18, 32, 58, 0.12);
+    --shadow-lg: 0 28px 70px rgba(12, 22, 40, 0.2);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
+    min-height: 100vh;
+    font-family: 'IBM Plex Sans', 'Avenir Next', sans-serif;
+    background:
+      radial-gradient(circle at 8% 8%, rgba(47, 109, 246, 0.14), transparent 28rem),
+      radial-gradient(circle at 92% 12%, rgba(215, 169, 75, 0.2), transparent 24rem),
+      linear-gradient(180deg, #f8fafc 0%, var(--bg) 44%, #f7f3ea 100%);
     color: var(--text);
     line-height: 1.6;
   }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(rgba(16, 24, 39, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 24, 39, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.45), transparent 72%);
+  }
   header {
-    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(135deg, rgba(16, 24, 39, 0.98), rgba(23, 35, 58, 0.94)),
+      radial-gradient(circle at 85% 20%, rgba(47, 109, 246, 0.45), transparent 24rem);
     color: #fff;
-    padding: 3rem 2rem 2.5rem;
-    text-align: center;
+    padding: 5rem 2rem 7.25rem;
+    text-align: left;
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    width: 36rem;
+    height: 36rem;
+    right: -12rem;
+    top: -14rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(215, 169, 75, 0.34), transparent 64%);
+  }
+  header::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 9rem;
+    background: linear-gradient(180deg, transparent, rgba(238, 242, 247, 0.92));
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    align-items: end;
   }
   header .brand {
-    font-size: 0.85rem;
-    letter-spacing: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: fit-content;
+    padding: 0.42rem 0.75rem;
+    border: 1px solid rgba(215, 169, 75, 0.4);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 0.72rem;
+    letter-spacing: 3.2px;
     text-transform: uppercase;
     color: var(--gold);
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+    backdrop-filter: blur(18px);
+  }
+  header .brand::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 18px rgba(215, 169, 75, 0.8);
   }
   header h1 {
-    font-size: 2.2rem;
+    max-width: 760px;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: clamp(2.6rem, 6vw, 5.6rem);
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    letter-spacing: -0.055em;
+    line-height: 0.92;
+    margin-bottom: 1rem;
   }
   header p {
-    color: #a8b8d0;
-    font-size: 1rem;
-    max-width: 600px;
-    margin: 0 auto;
+    color: #c8d3e4;
+    font-size: 1.05rem;
+    max-width: 620px;
+  }
+  .hero-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 250px;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(18px);
+  }
+  .hero-chip .dot {
+    width: 2.65rem;
+    height: 2.65rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #ffe3a1);
+    box-shadow: 0 12px 34px rgba(215, 169, 75, 0.28);
+  }
+  .hero-chip strong {
+    display: block;
+    color: #fff;
+    font-size: 0.95rem;
+  }
+  .hero-chip span {
+    color: #aebcd0;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
   }
 
   .stats-bar {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    padding: 1.5rem 2rem;
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.85rem;
+    max-width: 1180px;
+    margin: -4.45rem auto 0;
+    padding: 0 1.5rem;
   }
-  .stat { text-align: center; }
+  .stat {
+    position: relative;
+    overflow: hidden;
+    min-height: 118px;
+    padding: 1.35rem;
+    border: 1px solid rgba(220, 228, 239, 0.9);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: var(--shadow-md);
+    text-align: left;
+    backdrop-filter: blur(18px);
+  }
+  .stat::after {
+    content: "";
+    position: absolute;
+    right: -1.8rem;
+    bottom: -2rem;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    background: rgba(47, 109, 246, 0.08);
+  }
   .stat .num {
-    font-size: 1.8rem;
+    position: relative;
+    z-index: 1;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 2.25rem;
     font-weight: 700;
-    color: var(--accent);
+    letter-spacing: -0.04em;
+    color: var(--navy);
   }
   .stat .label {
-    font-size: 0.78rem;
+    position: relative;
+    z-index: 1;
+    margin-top: 0.2rem;
+    font-size: 0.72rem;
+    font-weight: 700;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.13em;
   }
 
-  main { max-width: 1280px; margin: 2rem auto; padding: 0 1.5rem; }
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 2rem auto 0;
+    padding: 0 1.5rem;
+  }
 
   .controls {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) auto;
     gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    align-items: center;
+    align-items: start;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(220, 228, 239, 0.9);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
   }
   .search-box {
-    flex: 1;
-    min-width: 220px;
-    padding: 0.65rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.9rem;
+    width: 100%;
+    min-width: 0;
+    padding: 0.88rem 1rem 0.88rem 2.85rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background:
+      url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.875 18.75C15.2242 18.75 18.75 15.2242 18.75 10.875C18.75 6.52576 15.2242 3 10.875 3C6.52576 3 3 6.52576 3 10.875C3 15.2242 6.52576 18.75 10.875 18.75Z' stroke='%23728098' stroke-width='1.8'/%3E%3Cpath d='M16.45 16.45L21 21' stroke='%23728098' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") 1rem center / 18px no-repeat,
+      #fff;
+    box-shadow: inset 0 0 0 1px rgba(220, 228, 239, 0.9);
+    color: var(--ink);
+    font-size: 0.94rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: box-shadow 0.2s, transform 0.2s;
   }
-  .search-box:focus { border-color: var(--accent); }
+  .search-box:focus {
+    box-shadow: inset 0 0 0 1px var(--accent), 0 0 0 4px rgba(47, 109, 246, 0.12);
+    transform: translateY(-1px);
+  }
   .filter-btn {
-    padding: 0.65rem 1.2rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--card);
-    font-size: 0.82rem;
+    padding: 0.78rem 1rem;
+    border: 1px solid rgba(220, 228, 239, 0.95);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: var(--shadow-sm);
+    font-size: 0.78rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
     color: var(--text);
   }
   .filter-btns-wrap {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    justify-content: flex-end;
   }
   .filter-btn:hover, .filter-btn.active {
-    background: var(--accent);
+    background: var(--navy);
     color: #fff;
-    border-color: var(--accent);
+    border-color: var(--navy);
+    transform: translateY(-1px);
   }
+
+  .controls > .track-filter-row {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 0.7rem;
+    border-top: 1px dashed rgba(220, 228, 239, 0.95);
+  }
+  .track-filter-row .filter-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-right: 0.15rem;
+    white-space: nowrap;
+  }
+  .track-filter-row .filter-btns-wrap {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex: 1;
+  }
+  .filter-btn[data-track].active { background: var(--accent-strong); border-color: var(--accent-strong); }
 
   .ranking-source {
     width: 100%;
-    font-size: 0.75rem;
+    margin: 0 0 1.05rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(215, 169, 75, 0.28);
+    border-radius: var(--radius-md);
+    background: rgba(255, 243, 215, 0.54);
     color: var(--muted);
-    margin-top: 0.25rem;
+    font-size: 0.76rem;
+  }
+  .results-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    margin: 0.15rem 0 0.85rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .results-summary strong {
+    color: var(--navy);
+  }
+  .results-summary span:last-child {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
   }
 
   .table-wrap {
+    position: relative;
     overflow-x: auto;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1px solid rgba(220, 228, 239, 0.95);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: var(--shadow-lg);
   }
   table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     background: var(--card);
-    min-width: 900px;
+    min-width: 1060px;
   }
   thead {
-    background: var(--navy);
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: linear-gradient(90deg, var(--navy), var(--navy-2));
     color: #fff;
   }
   th {
-    padding: 0.85rem 0.75rem;
+    padding: 1rem 0.95rem;
     text-align: left;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    font-weight: 600;
+    letter-spacing: 0.12em;
+    font-weight: 700;
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
     position: relative;
   }
-  th:hover { background: #243556; }
+  th:first-child { border-top-left-radius: var(--radius-lg); }
+  th:last-child { border-top-right-radius: var(--radius-lg); }
+  th:hover { background: rgba(255, 255, 255, 0.08); }
   th .sort-arrow {
-    margin-left: 4px;
+    margin-left: 0.35rem;
     opacity: 0.4;
     font-size: 0.65rem;
   }
   th.sort-active .sort-arrow { opacity: 1; }
   th.no-sort { cursor: default; }
-  th.no-sort:hover { background: var(--navy); }
+  th.no-sort:hover { background: transparent; }
 
   td {
-    padding: 0.65rem 0.75rem;
-    font-size: 0.84rem;
+    padding: 0.86rem 0.95rem;
+    font-size: 0.86rem;
     border-bottom: 1px solid var(--border);
     vertical-align: middle;
+    transition: background 0.18s, color 0.18s;
   }
   tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--accent-light); }
+  tbody tr:nth-child(even) td { background: #fbfcff; }
+  tbody tr:hover td { background: var(--accent-light); }
+  tbody tr td:first-child {
+    color: #94a0b4;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
 
-  .uni-name { font-weight: 600; color: var(--navy); white-space: nowrap; }
-  .major { color: var(--text); }
+  .uni-name {
+    font-weight: 700;
+    color: var(--navy);
+    white-space: nowrap;
+  }
+  .major {
+    max-width: 310px;
+    color: var(--text);
+  }
   .scholarship {
-    color: var(--accent);
-    font-weight: 600;
+    color: var(--accent-strong);
+    font-weight: 700;
     white-space: nowrap;
   }
   .rank-cell {
     text-align: center;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.82rem;
   }
-  .rank-top10 { color: #d4a843; }
-  .rank-top25 { color: #2d7a4f; }
+  .rank-top10 { color: #b7791f; }
+  .rank-top25 { color: var(--green); }
   .rank-top50 { color: var(--accent); }
   .rank-top100 { color: var(--text); }
   .rank-other { color: var(--muted); }
 
   .category-tag {
     display: inline-block;
-    padding: 0.15rem 0.55rem;
-    border-radius: 4px;
-    font-size: 0.68rem;
-    font-weight: 600;
+    padding: 0.26rem 0.62rem;
+    border-radius: 999px;
+    font-size: 0.64rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
     white-space: nowrap;
   }
-  .cat-stem { background: #e3f0e8; color: #2d7a4f; }
-  .cat-health { background: #fde8e8; color: #c53030; }
-  .cat-biz { background: #fef3e2; color: #b7791f; }
-  .cat-arts { background: #ede9fe; color: #6b46c1; }
-  .cat-social { background: #e8f4fd; color: #2b6cb0; }
+  .cat-stem { background: #e1f4eb; color: var(--green); }
+  .cat-health { background: #fde9e7; color: var(--red); }
+  .cat-biz { background: var(--gold-soft); color: #9a6a16; }
+  .cat-arts { background: #eee9ff; color: var(--violet); }
+  .cat-social { background: #e6f1ff; color: #245fba; }
 
   footer {
     text-align: center;
-    padding: 2.5rem;
+    padding: 2.75rem 1.5rem 3.5rem;
     color: var(--muted);
     font-size: 0.82rem;
   }
@@ -212,36 +448,69 @@
 
   /* --- Mobile: card layout instead of table --- */
   @media (max-width: 768px) {
-    header { padding: 2rem 1.2rem 1.8rem; }
+    header {
+      padding: 2.5rem 1rem 5.5rem;
+      text-align: left;
+    }
+    .hero-inner {
+      display: block;
+    }
+    .hero-chip {
+      margin-top: 1.4rem;
+      min-width: 0;
+      width: 100%;
+    }
     header .brand { font-size: 0.75rem; letter-spacing: 3px; }
-    header h1 { font-size: 1.3rem; }
-    header p { font-size: 0.85rem; }
+    header h1 { font-size: 2.5rem; }
+    header p { font-size: 0.92rem; }
 
     .stats-bar {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      padding: 1rem;
+      gap: 0.65rem;
+      margin-top: -4.05rem;
+      padding: 0 0.8rem;
     }
-    .stat .num { font-size: 1.4rem; }
-    .stat .label { font-size: 0.68rem; }
+    .stat {
+      min-height: 96px;
+      padding: 1rem;
+      border-radius: 18px;
+    }
+    .stat .num { font-size: 1.55rem; }
+    .stat .label { font-size: 0.62rem; letter-spacing: 0.09em; }
 
     main { padding: 0 0.75rem; margin: 1rem auto; }
 
-    .controls { flex-direction: column; gap: 0.5rem; }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 0.8rem;
+      border-radius: 18px;
+    }
     .search-box { min-width: 100%; font-size: 16px; /* prevents iOS zoom */ }
     .filter-btns-wrap {
       display: flex;
       gap: 0.4rem;
       flex-wrap: wrap;
+      justify-content: flex-start;
     }
     .filter-btn {
       padding: 0.5rem 0.8rem;
       font-size: 0.72rem;
-      border-radius: 6px;
     }
 
-    .ranking-source { font-size: 0.65rem; margin-bottom: 0.75rem; }
+    .ranking-source { font-size: 0.66rem; margin-bottom: 0.8rem; }
+    .results-summary {
+      display: block;
+      font-size: 0.74rem;
+      margin-bottom: 0.75rem;
+    }
+    .results-summary span:last-child {
+      display: block;
+      margin-top: 0.18rem;
+      font-size: 0.62rem;
+    }
 
     .table-wrap { box-shadow: none; border-radius: 0; }
 
@@ -249,11 +518,20 @@
     table { display: none; }
     .mobile-cards { display: flex; flex-direction: column; gap: 0.6rem; }
     .mobile-card {
-      background: var(--card);
-      border-radius: 10px;
-      padding: 0.9rem 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      border-left: 4px solid var(--accent);
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(220, 228, 239, 0.95);
+      border-radius: 18px;
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .mobile-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: linear-gradient(180deg, var(--accent), var(--gold));
     }
     .mobile-card .mc-uni {
       font-weight: 700;
@@ -281,21 +559,22 @@
       font-weight: 600;
     }
     .mobile-card .mc-scholarship {
-      color: var(--accent);
+      color: var(--accent-strong);
       font-weight: 700;
       font-size: 0.8rem;
     }
     .mobile-card .mc-ranks {
       display: flex;
-      gap: 0.8rem;
-      margin-top: 0.4rem;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.55rem;
     }
     .mobile-card .mc-rank-badge {
       background: var(--accent-light);
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
+      padding: 0.26rem 0.52rem;
+      border-radius: 999px;
       font-size: 0.7rem;
-      font-weight: 600;
+      font-weight: 700;
     }
     .mobile-card .mc-rank-badge.gold { background: #fef3e2; color: #b7791f; }
     .mobile-card .mc-rank-badge.green { background: #e3f0e8; color: #2d7a4f; }
@@ -313,9 +592,20 @@
 <body>
 
 <header>
-  <div class="brand">Blueprint Consulting</div>
-  <h1>2025-2026 University Admissions Results</h1>
-  <p>Our students' acceptances across top universities worldwide</p>
+  <div class="hero-inner">
+    <div>
+      <div class="brand">Blueprint Consulting</div>
+      <h1>2025-2026 University Admissions Results</h1>
+      <p>Verified acceptances, scholarships, and ranking context across top universities worldwide.</p>
+    </div>
+    <div class="hero-chip" aria-label="Admissions report status">
+      <div class="dot" aria-hidden="true"></div>
+      <div>
+        <strong>Live results dashboard</strong>
+        <span>Updated for 2026 rankings</span>
+      </div>
+    </div>
+  </div>
 </header>
 
 <div class="stats-bar">
@@ -328,7 +618,7 @@
 <main>
   <div class="controls">
     <input type="text" class="search-box" id="search" placeholder="Search university or major...">
-    <div class="filter-btns-wrap">
+    <div class="filter-btns-wrap" data-filter="cat">
       <button type="button" class="filter-btn active" data-cat="all">All</button>
       <button type="button" class="filter-btn" data-cat="stem">STEM</button>
       <button type="button" class="filter-btn" data-cat="health">Health &amp; Medicine</button>
@@ -336,8 +626,21 @@
       <button type="button" class="filter-btn" data-cat="arts">Arts &amp; Media</button>
       <button type="button" class="filter-btn" data-cat="social">Social Sciences</button>
     </div>
+    <div class="track-filter-row">
+      <span class="filter-label">School Track</span>
+      <div class="filter-btns-wrap" data-filter="track">
+        <button type="button" class="filter-btn active" data-track="all">All</button>
+        <button type="button" class="filter-btn" data-track="med">의치대약대</button>
+        <button type="button" class="filter-btn" data-track="as">Arts and Sciences</button>
+        <button type="button" class="filter-btn" data-track="eng">Engineering</button>
+      </div>
+    </div>
   </div>
-  <div class="ranking-source">Rankings: U.S. News &amp; World Report 2026 Best National Universities (National) &amp; Best Program Rankings (Program). UK/Japan schools use country-specific rankings. Program rankings from U.S. News, QS Subject Rankings, or TheWrap where applicable.</div>
+  <div class="ranking-source">Rankings: U.S. News &amp; World Report 2026 Best Colleges for U.S. institution ranks unless labeled otherwise. Program/subject ranks show the ranking type in parentheses; track-only admits such as pre-health/pre-dental are not assigned a professional-school rank.</div>
+  <div class="results-summary">
+    <span id="results-summary-text">Showing all results</span>
+    <span>Click column headers to sort</span>
+  </div>
 
   <div class="table-wrap">
   <table>
@@ -347,9 +650,9 @@
         <th data-sort="uni">University <span class="sort-arrow">&#9650;</span></th>
         <th data-sort="major">Program / Major <span class="sort-arrow">&#9650;</span></th>
         <th data-sort="cat">Category <span class="sort-arrow">&#9650;</span></th>
-        <th data-sort="natRank">Nat'l Rank <span class="sort-arrow">&#9650;</span></th>
+        <th data-sort="natRank">Institution Rank <span class="sort-arrow">&#9650;</span></th>
 
-        <th data-sort="progRank">Program Rank <span class="sort-arrow">&#9650;</span></th>
+        <th data-sort="progRank">Program / Subject Rank <span class="sort-arrow">&#9650;</span></th>
         <th data-sort="scholarship">Scholarship <span class="sort-arrow">&#9650;</span></th>
       </tr>
     </thead>
@@ -361,60 +664,61 @@
 
 <footer>
   &copy; 2025-2026 <strong>Blueprint Consulting</strong>. All rights reserved.
-  <div class="disclaimer">Rankings are approximate and sourced from publicly available 2025 data. Program rankings where available. "—" indicates unranked or unavailable.</div>
+  <div class="disclaimer">Rankings are sourced from publicly available 2025-2026 ranking releases. "—" indicates unranked, unavailable, or not directly applicable to the admitted program.</div>
 </footer>
 
 <script>
-// natRank: US News National (US) or country rank (UK/Japan)
-// globalRank: QS World 2025
-// progRank: US News Best Program rank for that specific field (where available)
+// natRank: U.S. News 2026 National Universities rank when directly applicable.
+// natLabel: non-national or non-U.S. institution rank label when directly applicable.
+// progRank: numeric program/subject rank only when the source/type is explicit.
+// progText: non-numeric rank text, range, or track note.
 const DATA = [
   { uni: "Adelphi University", major: "Biology", cat: "stem", natRank: 198, progRank: 0, scholarship: "$148,000 ($37,000/yr)" },
   { uni: "Babson University", major: "Technology Entrepreneurship & Business Analytics", cat: "biz", natRank: 0, progRank: 1, progLabel: "Entrepreneurship", scholarship: "" },
-  { uni: "Boston University", major: "Communications", cat: "arts", natRank: 42, progRank: 4, progLabel: "Communications", scholarship: "" },
-  { uni: "Carnegie Mellon University", major: "Economics", cat: "biz", natRank: 20, progRank: 6, progLabel: "Business", scholarship: "" },
-  { uni: "Carnegie Mellon University", major: "Film & Visual Media Program", cat: "arts", natRank: 20, progRank: 7, progLabel: "Film/Media", scholarship: "" },
-  { uni: "Case Western Reserve University", major: "Pre-Professional Scholars Program (PPSP) — Dentistry", cat: "health", natRank: 51, progRank: 18, progLabel: "Dentistry", scholarship: "" },
+  { uni: "Boston University", major: "Communications", cat: "arts", natRank: 42, progRank: 4, progLabel: "Comm. (CT)", scholarship: "" },
+  { uni: "Carnegie Mellon University", major: "Economics", cat: "biz", natRank: 20, progRank: 6, progLabel: "UG Business", scholarship: "" },
+  { uni: "Carnegie Mellon University", major: "Film & Visual Media Program", cat: "arts", natRank: 20, progRank: 0, progText: "Related arts/media program", scholarship: "" },
+  { uni: "Case Western Reserve University", major: "Pre-Professional Scholars Program (PPSP) — Dentistry", cat: "health", natRank: 51, progRank: 0, progText: "Pre-dental direct track", scholarship: "" },
   { uni: "College of Wooster", major: "Biochemistry", cat: "stem", natRank: 0, progRank: 57, progLabel: "Liberal Arts", natLabel: "LAC #57", scholarship: "$140,000 ($35,000/yr)" },
-  { uni: "Columbia University", major: "Biological Sciences", cat: "stem", natRank: 15, progRank: 11, progLabel: "Biology", scholarship: "" },
-  { uni: "Columbia University", major: "Mechanical Engineering", cat: "stem", natRank: 15, progRank: 27, progLabel: "Mech. Eng.", scholarship: "" },
+  { uni: "Columbia University", major: "Biological Sciences", cat: "stem", natRank: 15, progRank: 11, progLabel: "Bio Sci (Grad)", scholarship: "" },
+  { uni: "Columbia University", major: "Mechanical Engineering", cat: "stem", natRank: 15, progRank: 27, progLabel: "Mech. Eng. (Grad)", scholarship: "" },
   { uni: "Emory University", major: "Quantitative Sciences", cat: "stem", natRank: 24, progRank: 0, scholarship: "" },
   { uni: "Emory University", major: "Economics & Statistics", cat: "biz", natRank: 24, progRank: 0, scholarship: "" },
   { uni: "Emory University", major: "Quantitative Sciences", cat: "stem", natRank: 24, progRank: 0, scholarship: "" },
-  { uni: "Georgia Institute of Technology", major: "Business Management", cat: "biz", natRank: 32, progRank: 18, progLabel: "Business", scholarship: "" },
-  { uni: "Indiana University", major: "Economics", cat: "biz", natRank: 73, progRank: 9, progLabel: "Business (Kelley)", scholarship: "" },
+  { uni: "Georgia Institute of Technology", major: "Business Management", cat: "biz", natRank: 32, progRank: 19, progLabel: "UG Business", scholarship: "" },
+  { uni: "Indiana University", major: "Economics", cat: "biz", natRank: 73, progRank: 8, progLabel: "UG Business (Kelley)", scholarship: "" },
   { uni: "Keio University (Japan)", major: "PEARL — Faculty of Economics", cat: "biz", natRank: 0, progRank: 119, progLabel: "Econ (QS)", natLabel: "Japan #2", scholarship: "" },
   { uni: "King's College London", major: "Dentistry BDS", cat: "health", natRank: 0, progRank: 4, progLabel: "Dentistry (QS)", natLabel: "UK #7", scholarship: "" },
   { uni: "Loyola Marymount University", major: "Film and Television Production", cat: "arts", natRank: 102, progRank: 5, progLabel: "Film/TV", scholarship: "$70,000" },
-  { uni: "MCPHS University", major: "B.S. in Predental-Dental Hygiene", cat: "health", natRank: 0, progRank: 80, progLabel: "Pharmacy", scholarship: "$35,000 ($10,000/yr)" },
-  { uni: "New York University", major: "Pre-Health: Dental", cat: "health", natRank: 32, progRank: 10, progLabel: "Dental", scholarship: "" },
+  { uni: "MCPHS University", major: "B.S. in Predental-Dental Hygiene", cat: "health", natRank: 0, progRank: 0, progText: "Dental hygiene/pre-dental", scholarship: "$35,000 ($10,000/yr)" },
+  { uni: "New York University", major: "Pre-Health: Dental", cat: "health", natRank: 32, progRank: 0, progText: "Pre-health track", scholarship: "" },
   { uni: "New York University", major: "Cinema and Media Studies (BFA)", cat: "arts", natRank: 32, progRank: 2, progLabel: "Film/TV", scholarship: "" },
   { uni: "Newcastle University (UK)", major: "5-Year MBBS Medicine", cat: "health", natRank: 0, progRank: 15, progLabel: "Medicine (UK)", natLabel: "UK #18", scholarship: "" },
-  { uni: "Northeastern University", major: "Pharmacy (PharmD)", cat: "health", natRank: 46, progRank: 41, progLabel: "Pharmacy", scholarship: "" },
+  { uni: "Northeastern University", major: "Pharmacy (PharmD)", cat: "health", natRank: 46, progRank: 0, progText: "PharmD program", scholarship: "" },
   { uni: "Northeastern University", major: "Computer Engineering & Computer Science", cat: "stem", natRank: 46, progRank: 32, progLabel: "CS", scholarship: "" },
   { uni: "Northeastern University", major: "Computer Science & Biology (Martinson Honors)", cat: "stem", natRank: 46, progRank: 32, progLabel: "CS", scholarship: "" },
   { uni: "Northeastern University", major: "Mathematics & Sociology", cat: "social", natRank: 46, progRank: 0, scholarship: "" },
-  { uni: "Northwestern University", major: "Biological Sciences", cat: "stem", natRank: 7, progRank: 17, progLabel: "Biology", scholarship: "" },
+  { uni: "Northwestern University", major: "Biological Sciences", cat: "stem", natRank: 7, progRank: 17, progLabel: "Bio Sci (Grad)", scholarship: "" },
   { uni: "Nova Southeastern University", major: "Biology", cat: "stem", natRank: 257, progRank: 0, scholarship: "$84,000 ($21,000/yr)" },
-  { uni: "Penn State University", major: "Mechanical Engineering", cat: "stem", natRank: 46, progRank: 14, progLabel: "Engineering", scholarship: "" },
+  { uni: "Penn State University", major: "Mechanical Engineering", cat: "stem", natRank: 59, progRank: 16, progLabel: "Mech. Eng. (UG)", scholarship: "" },
   { uni: "Purdue University", major: "Actuarial Science", cat: "stem", natRank: 46, progRank: 0, scholarship: "" },
-  { uni: "Purdue University", major: "Engineering", cat: "stem", natRank: 46, progRank: 4, progLabel: "Engineering", scholarship: "" },
+  { uni: "Purdue University", major: "Engineering", cat: "stem", natRank: 46, progRank: 8, progLabel: "Engineering (UG)", scholarship: "" },
   { uni: "Purdue University", major: "Economics", cat: "biz", natRank: 46, progRank: 0, scholarship: "" },
   { uni: "Purdue University", major: "Mathematics", cat: "stem", natRank: 46, progRank: 24, progLabel: "Math", scholarship: "" },
   { uni: "Queen Mary University of London", major: "Medicine MBBS", cat: "health", natRank: 0, progRank: 62, progLabel: "Medicine (QS)", natLabel: "UK #22", scholarship: "" },
   { uni: "Rice University", major: "Biology (Cell Biology & Genetics)", cat: "stem", natRank: 17, progRank: 0, scholarship: "" },
   { uni: "Rice University", major: "Architecture", cat: "arts", natRank: 17, progRank: 9, progLabel: "Architecture", scholarship: "" },
-  { uni: "Rutgers University", major: "Pre-Dentistry", cat: "health", natRank: 42, progRank: 19, progLabel: "Dental", scholarship: "" },
+  { uni: "Rutgers University", major: "Pre-Dentistry", cat: "health", natRank: 42, progRank: 0, progText: "Pre-dental track", scholarship: "" },
   { uni: "Santa Clara University", major: "Economics", cat: "biz", natRank: 59, progRank: 65, progLabel: "Business", scholarship: "" },
-  { uni: "St. John's University", major: "Pharmacy (6-Year Pharm.D.)", cat: "health", natRank: 151, progRank: 72, progLabel: "Pharmacy", scholarship: "$144,000 ($36,000/yr)" },
+  { uni: "St. John's University", major: "Pharmacy (6-Year Pharm.D.)", cat: "health", natRank: 151, progRank: 0, progText: "PharmD program", scholarship: "$144,000 ($36,000/yr)" },
   { uni: "Stony Brook University (SUNY)", major: "Biology", cat: "stem", natRank: 59, progRank: 0, scholarship: "" },
   { uni: "Stony Brook University (SUNY)", major: "Pre-Clinical Laboratory Science", cat: "health", natRank: 59, progRank: 0, scholarship: "$60,000 ($15,000/yr)" },
-  { uni: "SUNY University at Buffalo", major: "Nuclear Medicine Technology", cat: "health", natRank: 75, progRank: 42, progLabel: "Health Sci", scholarship: "$72,000 ($18,000/yr)" },
-  { uni: "Temple University", major: "Combined PharmD", cat: "health", natRank: 102, progRank: 50, progLabel: "Pharmacy", scholarship: "" },
-  { uni: "Texas A&M University", major: "General Engineering", cat: "stem", natRank: 51, progRank: 12, progLabel: "Engineering", scholarship: "" },
+  { uni: "SUNY University at Buffalo", major: "Nuclear Medicine Technology", cat: "health", natRank: 75, progRank: 0, progText: "Nuclear medicine tech", scholarship: "$72,000 ($18,000/yr)" },
+  { uni: "Temple University", major: "Combined PharmD", cat: "health", natRank: 102, progRank: 0, progText: "PharmD program", scholarship: "" },
+  { uni: "Texas A&M University", major: "General Engineering", cat: "stem", natRank: 51, progRank: 17, progLabel: "Engineering (UG)", scholarship: "" },
   { uni: "University of Bristol (UK)", major: "Veterinary Science: Accelerated Graduate Entry", cat: "health", natRank: 0, progRank: 30, progLabel: "Vet Sci (QS)", natLabel: "UK #10", scholarship: "" },
-  { uni: "University of California, Berkeley", major: "Political Science", cat: "social", natRank: 15, progRank: 3, progLabel: "Poli Sci", scholarship: "" },
-  { uni: "University of California, Berkeley", major: "Economics", cat: "biz", natRank: 15, progRank: 3, progLabel: "Economics", scholarship: "" },
+  { uni: "University of California, Berkeley", major: "Political Science", cat: "social", natRank: 15, progRank: 3, progLabel: "Poli Sci (Grad)", scholarship: "" },
+  { uni: "University of California, Berkeley", major: "Economics", cat: "biz", natRank: 15, progRank: 3, progLabel: "Econ (UG)", scholarship: "" },
   { uni: "University of California, Berkeley", major: "Film & Media", cat: "arts", natRank: 15, progRank: 0, scholarship: "" },
   { uni: "University of California, Davis", major: "Mechanical Engineering", cat: "stem", natRank: 32, progRank: 32, progLabel: "Engineering", scholarship: "" },
   { uni: "University of California, Davis", major: "Animal Biology", cat: "stem", natRank: 32, progRank: 1, progLabel: "Vet/Animal Sci", scholarship: "" },
@@ -430,32 +734,32 @@ const DATA = [
   { uni: "University of California, Irvine", major: "Software Engineering & Biomedical Engineering, B.S.", cat: "stem", natRank: 32, progRank: 25, progLabel: "CS", scholarship: "" },
   { uni: "University of California, Irvine", major: "Economics", cat: "biz", natRank: 32, progRank: 39, progLabel: "Economics", scholarship: "" },
   { uni: "University of California, Irvine", major: "Undeclared", cat: "social", natRank: 32, progRank: 0, scholarship: "" },
-  { uni: "University of California, Los Angeles", major: "Mechanical Engineering", cat: "stem", natRank: 17, progRank: 16, progLabel: "Engineering", scholarship: "" },
-  { uni: "University of California, Los Angeles", major: "Computational & Systems Biology", cat: "stem", natRank: 17, progRank: 6, progLabel: "Biology", scholarship: "" },
-  { uni: "University of California, San Diego", major: "Public Policy", cat: "social", natRank: 29, progRank: 15, progLabel: "Poli Sci", scholarship: "" },
-  { uni: "University of California, Santa Barbara", major: "Public Policy", cat: "social", natRank: 40, progRank: 12, progLabel: "Poli Sci", scholarship: "" },
+  { uni: "University of California, Los Angeles", major: "Mechanical Engineering", cat: "stem", natRank: 17, progRank: 16, progLabel: "Mech. Eng. (UG)", scholarship: "" },
+  { uni: "University of California, Los Angeles", major: "Computational & Systems Biology", cat: "stem", natRank: 17, progRank: 6, progLabel: "Bio Sci (Grad)", scholarship: "" },
+  { uni: "University of California, San Diego", major: "Public Policy", cat: "social", natRank: 29, progRank: 15, progLabel: "Poli Sci (Grad)", scholarship: "" },
+  { uni: "University of California, Santa Barbara", major: "Public Policy", cat: "social", natRank: 40, progRank: 12, progLabel: "Poli Sci (Grad)", scholarship: "" },
   { uni: "University of Detroit Mercy", major: "Accelerated 7-Year Dental Program", cat: "health", natRank: 183, progRank: 0, scholarship: "$10,000" },
   { uni: "University of Illinois, Urbana-Champaign", major: "Media & Cinema Studies", cat: "arts", natRank: 36, progRank: 0, scholarship: "" },
-  { uni: "University of Illinois, Urbana-Champaign", major: "Biomedical Engineering", cat: "stem", natRank: 36, progRank: 6, progLabel: "Engineering", scholarship: "" },
+  { uni: "University of Illinois, Urbana-Champaign", major: "Biomedical Engineering", cat: "stem", natRank: 36, progRank: 14, progLabel: "Bioengineering (UG)", scholarship: "" },
   { uni: "University of Michigan, Dearborn", major: "Cybersecurity & Information Assurance", cat: "stem", natRank: 0, progRank: 0, natLabel: "Regional #14", scholarship: "" },
-  { uni: "University of North Carolina", major: "Economics", cat: "biz", natRank: 26, progRank: 20, progLabel: "Economics", scholarship: "" },
+  { uni: "University of North Carolina", major: "Economics", cat: "biz", natRank: 26, progRank: 20, progLabel: "Econ (UG)", scholarship: "" },
   { uni: "University of the Pacific", major: "Pre-Dental Advantage Program", cat: "health", natRank: 139, progRank: 0, scholarship: "$84,000 ($21,000/yr)" },
-  { uni: "University of the Pacific", major: "Pre-Pharmacy Advantage: 2+3 Pathway", cat: "health", natRank: 139, progRank: 69, progLabel: "Pharmacy", scholarship: "$32,000" },
-  { uni: "University of Pittsburgh", major: "Pharmacy & Pharmaceutical Sciences", cat: "health", natRank: 69, progRank: 25, progLabel: "Pharmacy", scholarship: "" },
-  { uni: "University of Rhode Island", major: "Pharmacy (0-6 Doctor of Pharmacy)", cat: "health", natRank: 152, progRank: 35, progLabel: "Pharmacy", scholarship: "$84,000 (Presidential, 6 yrs)" },
-  { uni: "University of Southern California", major: "Public Policy, B.S. (PSPP)", cat: "social", natRank: 28, progRank: 3, progLabel: "Public Affairs", scholarship: "" },
+  { uni: "University of the Pacific", major: "Pre-Pharmacy Advantage: 2+3 Pathway", cat: "health", natRank: 139, progRank: 0, progText: "Pre-pharmacy pathway", scholarship: "$32,000" },
+  { uni: "University of Pittsburgh", major: "Pharmacy & Pharmaceutical Sciences", cat: "health", natRank: 69, progRank: 8, progLabel: "Pharmacy (Grad)", scholarship: "" },
+  { uni: "University of Rhode Island", major: "Pharmacy (0-6 Doctor of Pharmacy)", cat: "health", natRank: 152, progRank: 0, progText: "PharmD program", scholarship: "$84,000 (Presidential, 6 yrs)" },
+  { uni: "University of Southern California", major: "Public Policy, B.S. (PSPP)", cat: "social", natRank: 28, progRank: 3, progLabel: "Public Affairs (Grad)", scholarship: "" },
   { uni: "University of Southern California", major: "Film & Television Production", cat: "arts", natRank: 28, progRank: 1, progLabel: "Film/TV", scholarship: "" },
-  { uni: "University of Texas, Austin", major: "Biochemistry", cat: "stem", natRank: 30, progRank: 25, progLabel: "Biology", scholarship: "" },
+  { uni: "University of Texas, Austin", major: "Biochemistry", cat: "stem", natRank: 30, progRank: 25, progLabel: "Bio Sci (Grad)", scholarship: "" },
   { uni: "University of Texas, Austin", major: "Mathematics", cat: "stem", natRank: 30, progRank: 11, progLabel: "Math", scholarship: "" },
   { uni: "University of Toledo", major: "Bio + DDS Accelerated Program (Case Western)", cat: "health", natRank: 293, progRank: 0, scholarship: "" },
   { uni: "University of Toledo", major: "Pharmacy & Pharmaceutical Sciences", cat: "health", natRank: 293, progRank: 0, scholarship: "" },
   { uni: "University of Washington, Seattle", major: "Cinema and Media Studies", cat: "arts", natRank: 42, progRank: 0, scholarship: "" },
   { uni: "University of Washington, Seattle", major: "Applied & Computational Math Sciences", cat: "stem", natRank: 42, progRank: 7, progLabel: "CS", scholarship: "" },
-  { uni: "University of Washington, Seattle", major: "Microbiology", cat: "stem", natRank: 42, progRank: 23, progLabel: "Biology", scholarship: "" },
+  { uni: "University of Washington, Seattle", major: "Microbiology", cat: "stem", natRank: 42, progRank: 23, progLabel: "Bio Sci (Grad)", scholarship: "" },
   { uni: "University of Wisconsin-Madison", major: "Applied Math, Engineering & Physics", cat: "stem", natRank: 36, progRank: 14, progLabel: "Engineering", scholarship: "" },
-  { uni: "Washington University in St. Louis", major: "Biology & Music", cat: "stem", natRank: 20, progRank: 15, progLabel: "Biology", scholarship: "" },
-  { uni: "Weill Cornell Medicine — Qatar", major: "6-Year Medical Program (Pre-Med + M.D.)", cat: "health", natRank: 0, natLabel: "Qatar", progRank: 11, progLabel: "Medicine (US News)", scholarship: "" },
-  { uni: "Western New England University", major: "Pharmacy", cat: "health", natRank: 0, progRank: 86, progLabel: "Pharmacy", scholarship: "" },
+  { uni: "Washington University in St. Louis", major: "Biology & Music", cat: "stem", natRank: 20, progRank: 15, progLabel: "Bio Sci (Grad)", scholarship: "" },
+  { uni: "Weill Cornell Medicine — Qatar", major: "6-Year Medical Program (Pre-Med + M.D.)", cat: "health", natRank: 0, natLabel: "Qatar", progRank: 0, progText: "Cornell Medicine affiliate", scholarship: "" },
+  { uni: "Western New England University", major: "Pharmacy", cat: "health", natRank: 283, progRank: 0, progText: "PharmD program", scholarship: "" },
   { uni: "Westminster University", major: "Pre-Dental: Molecular Biology", cat: "health", natRank: 0, progRank: 0, scholarship: "$120,000 ($30,000/yr)" },
 ];
 
@@ -482,6 +786,12 @@ function formatRank(r, label) {
   return "#" + r;
 }
 
+function formatProgramRank(d) {
+  if (d.progText) return d.progText;
+  if (!d.progRank || d.progRank <= 0) return "—";
+  return "#" + d.progRank + (d.progLabel ? " <small style='color:#7a8ba5;font-weight:400'>(" + d.progLabel + ")</small>" : "");
+}
+
 let sortCol = null;
 let sortDir = 1; // 1 = asc, -1 = desc
 
@@ -492,7 +802,7 @@ function render(data) {
     var label = catInfo[0];
     var cls = catInfo[1];
     var natDisplay = formatRank(d.natRank, d.natLabel);
-    var progDisplay = d.progRank > 0 ? "#" + d.progRank + (d.progLabel ? " <small style='color:#7a8ba5;font-weight:400'>(" + d.progLabel + ")</small>" : "") : "—";
+    var progDisplay = formatProgramRank(d);
     return '<tr data-cat="' + d.cat + '">' +
       '<td>' + (i + 1) + '</td>' +
       '<td class="uni-name">' + d.uni + '</td>' +
@@ -514,12 +824,13 @@ function render(data) {
       var natDisplay = formatRank(d.natRank, d.natLabel);
       var badges = '';
       if (d.natRank > 0 || d.natLabel) {
-        var bc = d.natRank <= 10 ? 'gold' : d.natRank <= 25 ? 'green' : 'blue';
-        badges += '<span class="mc-rank-badge ' + bc + '">Nat\'l ' + natDisplay + '</span>';
+        var bc = d.natRank > 0 && d.natRank <= 10 ? 'gold' : d.natRank > 0 && d.natRank <= 25 ? 'green' : 'blue';
+        badges += '<span class="mc-rank-badge ' + bc + '">Inst. ' + natDisplay + '</span>';
       }
-      if (d.progRank > 0) {
-        var pc = d.progRank <= 10 ? 'gold' : d.progRank <= 25 ? 'green' : 'blue';
-        badges += '<span class="mc-rank-badge ' + pc + '">#' + d.progRank + (d.progLabel ? ' ' + d.progLabel : '') + '</span>';
+      if (d.progRank > 0 || d.progText) {
+        var pc = d.progRank > 0 && d.progRank <= 10 ? 'gold' : d.progRank > 0 && d.progRank <= 25 ? 'green' : 'blue';
+        var progBadge = d.progText || ('#' + d.progRank + (d.progLabel ? ' ' + d.progLabel : ''));
+        badges += '<span class="mc-rank-badge ' + pc + '">' + progBadge + '</span>';
       }
       var schol = d.scholarship ? '<div class="mc-scholarship">' + d.scholarship + '</div>' : '';
       return '<div class="mobile-card">' +
@@ -534,6 +845,7 @@ function render(data) {
 
 function updateStats(data) {
   document.getElementById("total-count").textContent = data.length;
+  var summary = document.getElementById("results-summary-text");
   var unis = {};
   var total = 0;
   var top25 = {};
@@ -549,6 +861,9 @@ function updateStats(data) {
   document.getElementById("uni-count").textContent = Object.keys(unis).length;
   document.getElementById("scholarship-total").textContent = "$" + total.toLocaleString();
   document.getElementById("top25-count").textContent = Object.keys(top25).length;
+  if (summary) {
+    summary.innerHTML = 'Showing <strong>' + data.length + '</strong> acceptances across <strong>' + Object.keys(unis).length + '</strong> universities';
+  }
 }
 
 function sortData(data) {
@@ -575,16 +890,26 @@ function sortData(data) {
   return sorted;
 }
 
+function deriveTrack(d) {
+  if (d.cat === "health") return "med";
+  if (/engineer|cybersecurity|computer science/i.test(d.major)) return "eng";
+  if (d.cat === "biz" && /business|entrepreneur/i.test(d.progLabel || "")) return "biz";
+  return "as";
+}
+
 function applyFilters() {
   var q = document.getElementById("search").value.toLowerCase();
-  var activeBtn = document.querySelector(".filter-btn.active");
-  var cat = activeBtn ? activeBtn.dataset.cat : "all";
+  var activeCatBtn = document.querySelector('[data-filter="cat"] .filter-btn.active');
+  var cat = activeCatBtn ? activeCatBtn.dataset.cat : "all";
+  var activeTrackBtn = document.querySelector('[data-filter="track"] .filter-btn.active');
+  var track = activeTrackBtn ? activeTrackBtn.dataset.track : "all";
   var filtered = [];
   for (var i = 0; i < DATA.length; i++) {
     var d = DATA[i];
     var matchCat = cat === "all" || d.cat === cat;
+    var matchTrack = track === "all" || deriveTrack(d) === track;
     var matchQ = !q || d.uni.toLowerCase().indexOf(q) !== -1 || d.major.toLowerCase().indexOf(q) !== -1;
-    if (matchCat && matchQ) filtered.push(d);
+    if (matchCat && matchTrack && matchQ) filtered.push(d);
   }
   filtered = sortData(filtered);
   render(filtered);
@@ -615,7 +940,10 @@ document.querySelectorAll("th[data-sort]").forEach(function(th) {
 document.getElementById("search").addEventListener("input", applyFilters);
 document.querySelectorAll(".filter-btn").forEach(function(btn) {
   btn.addEventListener("click", function() {
-    document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+    var group = btn.closest(".filter-btns-wrap");
+    if (group) {
+      group.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+    }
     btn.classList.add("active");
     applyFilters();
   });
